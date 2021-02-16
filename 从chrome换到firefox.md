@@ -28,7 +28,7 @@ Chrome 的密码保存是依赖操作系统的，不同系统的采取方案会�
 
 跟 Chrome 不一样的是，Firefox 在所有平台采用相同的密码保存策略，用户名和密码解密方式如下图所示（[图片来源](http://raidersec.blogspot.com/2013/06/how-browsers-store-your-passwords-and.html?m=1)）：
 
-![ff_flow_mine](asserts/从chrome换到firefox/ff_flow_mine.png)
+![ff_flow_mine](assets/从chrome换到firefox/ff_flow_mine.png)
 
 用户信息使用 3DES 加密，密钥叫做 SDR key (Secret Decoder Ring)。SDR key 又是由主密码和固定的盐经过哈希算法和加密变换而来。所以安全性在于主密码的保密性。Firefox 的主密码需要用户手动设置（各个平台都要设置，Firefox 不会同步主密码），如果不设置，默认会是一个空字符串 `""`，是很不安全的。如果设置之后忘了主密码，那么已经加密的数据是没办法解密的，只能重新设置主密码，并把老数据丢弃掉。
 
@@ -48,7 +48,7 @@ Chrome 的密码保存是依赖操作系统的，不同系统的采取方案会�
 4. [StackOverflow 上有人给出了获取 Windows 的 Chrome 密码的 Python 脚本。](https://stackoverflow.com/questions/61099492/chrome-80-password-file-decryption-in-python)
 
 ## 多说一句
-![chrome同步功能的加密选项](asserts/从chrome换到firefox/chrome同步功能的加密选项.jpg)
+![chrome同步功能的加密选项](assets/从chrome换到firefox/chrome同步功能的加密选项.jpg)
 
 Chrome 的同步设置里有个加密选项。这里的加密不是指加密保存到硬盘上，而是指加密发送到 Google 的服务器，以便同步密码。为啥不用这样的策略来加密硬盘上的用户名和密码呢？可能是因为如果用户更改密码，处理起来会很麻烦吧。
 
