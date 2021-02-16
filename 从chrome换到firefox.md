@@ -1,11 +1,4 @@
-- [前言](#前言)
-- [Chrome 的密码保存策略](#chrome-的密码保存策略)
-  - [Windows](#windows)
-  - [macOS](#macos)
-- [Firefox 的密码保存策略](#firefox-的密码保存策略)
-- [结论](#结论)
-- [参考](#参考)
-- [多说一句](#多说一句)
+[TOC]
 
 ## 前言
 
@@ -34,16 +27,18 @@ Chrome 的密码保存是依赖操作系统的，不同系统的采取方案会�
 ## Firefox 的密码保存策略
 
 跟 Chrome 不一样的是，Firefox 在所有平台采用相同的密码保存策略，用户名和密码解密方式如下图所示（[图片来源](http://raidersec.blogspot.com/2013/06/how-browsers-store-your-passwords-and.html?m=1)）：
-![](images/ff_flow_mine.png)
+
+![ff_flow_mine](asserts/从chrome换到firefox/ff_flow_mine.png)
 
 用户信息使用 3DES 加密，密钥叫做 SDR key (Secret Decoder Ring)。SDR key 又是由主密码和固定的盐经过哈希算法和加密变换而来。所以安全性在于主密码的保密性。Firefox 的主密码需要用户手动设置（各个平台都要设置，Firefox 不会同步主密码），如果不设置，默认会是一个空字符串 `""`，是很不安全的。如果设置之后忘了主密码，那么已经加密的数据是没办法解密的，只能重新设置主密码，并把老数据丢弃掉。
 
 ## 结论
 
 经过比较 Chrome 和 Firefox 的密码保存策略，可以知道 Windows 上很容易泄露 Chrome 所保存的密码。Chrome 为什么不像 Firefox 那样采用主密码呢？我在网上找不到 Google 官方的解释，根据一些论坛的解释以及我自己的理解，大概有 3 点：
+
 1. 没有绝对的安全。浏览器负责密码管理，那么密码总会以明文的方式存放到内存中，方便表单自动填充密码等操作。那么可以直接把浏览器进程的内存 dump 到文件中，从而获取真实的用户名和密码。也就是说，密码管理功能本来就不能做到 100% 安全。真在意安全性，就得人脑记住密码，一切的密码管理软件都是虚的。
 2. 便利性和安全性的权衡。在 Firefox 设置了主密码，那么 Firefox 每次读取硬盘上保存的用户名和密码时，都要要求用户输入主密码，为了安全性就得降低用户体验。
-3. 跟操作系统有关。macOS 的 Keychain 是个好东西，能做到应用级别的鉴权，既方便又能保证安全性。而Windows 系统还没有提供类似的鉴权机制。
+3. 跟操作系统有关。macOS 的 Keychain 是个好东西，能做到应用级别的鉴权，既方便又能保证安全性。而 Windows 系统还没有提供类似的鉴权机制。
 
 ## 参考
 
@@ -53,6 +48,7 @@ Chrome 的密码保存是依赖操作系统的，不同系统的采取方案会�
 4. [StackOverflow 上有人给出了获取 Windows 的 Chrome 密码的 Python 脚本。](https://stackoverflow.com/questions/61099492/chrome-80-password-file-decryption-in-python)
 
 ## 多说一句
-![](images/chrome同步功能的加密选项.jpg)
+![chrome同步功能的加密选项](asserts/从chrome换到firefox/chrome同步功能的加密选项.jpg)
 
 Chrome 的同步设置里有个加密选项。这里的加密不是指加密保存到硬盘上，而是指加密发送到 Google 的服务器，以便同步密码。为啥不用这样的策略来加密硬盘上的用户名和密码呢？可能是因为如果用户更改密码，处理起来会很麻烦吧。
+
