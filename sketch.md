@@ -1,4 +1,6 @@
-
+---
+mermaid: true
+---
 
 [TOC]
 
