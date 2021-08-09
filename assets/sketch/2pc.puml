@@ -1,0 +1,21 @@
+@startuml
+
+autoactivate on
+autonumber
+
+group 一阶段
+    协调者 -> 参与者: 进入准备阶段
+    return 准备成功/失败
+end
+
+group 二阶段 [提交]
+    协调者 -> 参与者: 提交事务
+    return 成功
+
+    opt 回滚
+        协调者 -> 参与者: 回滚事务
+        return 成功
+    end
+end
+
+@enduml

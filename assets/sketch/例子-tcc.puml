@@ -1,5 +1,6 @@
 @startuml
 autoactivate on
+autonumber
 
 用户 -> 业务层: 购买商品
 
@@ -17,11 +18,12 @@ group 二阶段 [confirm]
     业务层 -> 订单服务: 创建订单
     return success
 
-else cancel
-    业务层 -> 库存服务: 取消预占库存
-    return success
-    业务层 -> 订单服务: 取消预下单
-    return success
+    opt cancel
+        业务层 -> 库存服务: 取消预占库存
+        return success
+        业务层 -> 订单服务: 取消预下单
+        return success
+    end
 end
 
 return 购买成功
