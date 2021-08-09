@@ -2,10 +2,9 @@
 
 # 分布式事务
 
-分布式事务一个跨多个数据源，并且需要保证 ACID 特性的事务。其中数据源可以是数据库、消息队列、缓存、ES 等等。
+分布式事务是一个跨多个数据源，并且需要保证 ACID 特性的事务。其中数据源可以是数据库、消息队列、缓存、ES 等等。X/Open 定义的分布式事务模型：
 
-![DTP model](assets/sketch/DTP model.png)
-<center>X/Open 定义的分布式事务模型</center>
+![DTP model](assets/sketch/DTP-model.png)
 
 目前涉及到分布式事务的场景：
 
@@ -94,7 +93,11 @@ XA RECOVER [CONVERT XID]
 
 ## TCC 
 
-TCC 是 Try-Confirm-Cancel 三个单词的缩写，
+TCC 是 Try-Confirm-Cancel 三个单词的缩写，分别对应 2PC 中的一阶段、二阶段提交和二阶段回滚。TCC 事务是一种业务层面的解决方案，需要把一个接口拆分成 3 个分别对应Try、Confirm 和 Cancel 的接口。
+
+<img src="assets/sketch/例子-tcc.png" alt="例子-tcc" style="zoom: 50%;" />
+
+
 
 定义、原理、怎么用、例子、优缺点
 

@@ -1,0 +1,30 @@
+@startuml
+
+autoactivate on
+
+用户 -> 业务层: 购买商品
+
+group 一阶段 [try]
+    业务层 -> 库存服务: 预占库存
+    return success
+    业务层 -> 订单服务: 预下单
+    return success
+    业务层 -> 业务层 ++-- : 记录事务状态
+end
+
+group 二阶段 [confirm]
+    业务层 -> 库存服务: 扣减库存
+    return success
+    业务层 -> 订单服务: 创建订单
+    return success
+
+else cancel
+    业务层 -> 库存服务: 取消预占库存
+    return success
+    业务层 -> 订单服务: 取消预下单
+    return success
+end
+
+return 购买成功
+
+@enduml
