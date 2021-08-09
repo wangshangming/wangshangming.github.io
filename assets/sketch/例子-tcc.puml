@@ -1,5 +1,4 @@
 @startuml
-
 autoactivate on
 
 用户 -> 业务层: 购买商品

@@ -95,7 +95,7 @@ XA RECOVER [CONVERT XID]
 
 TCC 是 Try-Confirm-Cancel 三个单词的缩写，分别对应 2PC 中的一阶段、二阶段提交和二阶段回滚。TCC 事务是一种业务层面的解决方案，需要把一个接口拆分成 3 个分别对应Try、Confirm 和 Cancel 的接口。
 
-<img src="assets/sketch/例子-tcc.png" alt="例子-tcc" style="zoom: 50%;" />
+![例子-tcc](assets/sketch/例子-tcc.png)
 
 
 
