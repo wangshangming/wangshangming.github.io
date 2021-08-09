@@ -1,7 +1,3 @@
----
-mermaid: true
----
-
 [TOC]
 
 # 分布式事务
@@ -98,14 +94,7 @@ XA RECOVER [CONVERT XID]
 
 ## TCC 
 
-```mermaid
-graph LR
-A[方形] -->B(圆角)
-    B --> C{条件a}
-    C -->|a=1| D[结果1]
-    C -->|a=2| E[结果2]
-    F[横向流程图]
-```
+TCC 是 Try-Confirm-Cancel 三个单词的缩写，
 
 定义、原理、怎么用、例子、优缺点
 
