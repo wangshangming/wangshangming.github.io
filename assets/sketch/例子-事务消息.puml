@@ -1,0 +1,29 @@
+@startuml
+
+autoactivate on
+
+actor 用户
+participant 业务层
+participant 库存服务
+participant 订单服务
+
+用户 -> 业务层: 购买商品
+
+group 事务
+    业务层 -> 库存服务: 扣减库存
+    库存服务 -> 库存服务 ++-- : 更新库存
+    库存服务 -> 库存服务 ++-- : 消息表中插入扣减库存消息记录
+    return 成功
+end
+
+return 购买成功
+
+loop
+    库存服务 -> 库存服务 ++-- : 检查消息表是否有数据
+    库存服务 -> 订单服务: 扣减库存消息
+    订单服务 -> 订单服务 ++-- : 创建订单
+    return 成功
+    库存服务 -> 库存服务 ++-- : 删除消息
+end
+
+@enduml
