@@ -13,9 +13,9 @@ TM -> RM: 执行分支事务
 RM -> RM ++-- : 根据业务 SQL，生成数据修改之前的版本 beforeImage
 RM -> RM ++-- : 执行业务 SQL
 RM -> RM ++-- : 根据主键查询数据修改之后的版本 afterImage
+RM -> RM ++-- : 将 beforeImage 和 afterImage 保存到 undo_log 表中
 RM -> TC: 注册分支事务，同时该全局事务获得锁
 return 分支事务（branchId）
-RM -> RM ++-- : 将 beforeImage 和 afterImage 保存到 undo_log 表中
 RM -> RM ++-- : 分支事务提交
 return
 
