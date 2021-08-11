@@ -1,0 +1,17 @@
+@startuml
+
+autoactivate on
+
+actor 用户
+participant 业务层
+participant 库存服务
+participant 订单服务
+
+用户 -> 业务层: 购买商品
+    业务层 -> 库存服务: 扣减库存
+    return 成功
+    业务层 -> 订单服务: 创建订单
+    return 成功
+return 购买成功
+
+@enduml

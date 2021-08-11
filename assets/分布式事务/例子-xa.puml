@@ -1,0 +1,61 @@
+@startuml
+autoactivate on
+
+actor 用户
+participant 业务层
+participant 库存服务
+participant 订单服务
+database MySql
+
+用户 -> 业务层: 购买商品
+
+group 一阶段
+    业务层 -> 业务层 ++-- : 生成 xid
+    业务层 -> 库存服务: 扣减库存，xid
+        库存服务 -> MySql: xa start xid
+        return
+        库存服务 -> MySql: 更新库存的 SQL
+        return
+        库存服务 -> MySql: xa end xid
+        return
+        库存服务 -> MySql: xa prepare xid
+        return
+    return
+
+    业务层 -> 订单服务: 创建订单，xid
+        订单服务 -> MySql: xa start xid
+        return
+        订单服务 -> MySql: 创建订单的 SQL
+        return
+        订单服务 -> MySql: xa end xid
+        return
+        订单服务 -> MySql: xa prepare xid
+        return
+    return
+end
+
+group 二阶段 [提交]
+    业务层 -> 库存服务: 提交事务，xid
+        库存服务 -> MySql: xa commit xid
+        return
+    return
+    业务层 -> 订单服务: 提交事务，xid
+        订单服务 -> MySql: xa commit xid
+        return
+    return
+
+    opt 回滚
+        业务层 -> 库存服务: 回滚事务，xid
+            库存服务 -> MySql: xa rollback xid
+            return
+        return
+        业务层 -> 订单服务: 回滚事务，xid
+            订单服务 -> MySql: xa rollback xid
+            return
+        return
+    end
+end
+
+return 购买成功
+
+@enduml

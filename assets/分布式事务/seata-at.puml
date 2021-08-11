@@ -1,0 +1,43 @@
+@startuml
+
+autoactivate on
+
+participant TM
+participant RM
+participant TC
+
+TM -> TC: 开启全局事务
+return 全局事务id（xid）
+
+TM -> RM: 执行分支事务
+RM -> RM ++-- : 根据业务 SQL，生成数据修改之前的版本 beforeImage
+RM -> RM ++-- : 执行业务 SQL
+RM -> RM ++-- : 根据主键查询数据修改之后的版本 afterImage
+RM -> TC: 注册分支事务，同时该全局事务获得锁
+return 分支事务（branchId）
+RM -> RM ++-- : 将 beforeImage 和 afterImage 保存到 undo_log 表中
+RM -> RM ++-- : 分支事务提交
+return
+
+opt 提交
+    TM -> TC: 提交全局事务（xid）
+        TC -> RM: 提交事务（xid, branchId）
+        RM -> RM ++-- : 根据 xid, branchId 删除 undo_log 表中对应的记录
+        return
+        TC -> TC ++-- : 释放 xid 对应的全局锁
+    return
+else 回滚
+    TM -> TC: 回滚全局事务（xid）
+        TC -> RM: 回滚事务（xid, branchId）
+        RM -> RM ++-- : 根据 xid 和 branchId 查询 beforeImage 和 afterImage
+        opt afterImage 和当前数据相同
+            RM -> RM ++-- : 根据 beforeImage 生成回滚 SQL，并执行
+        else afterImage 和当前数据不同
+            RM -> RM ++-- : 回滚失败，可以执行用户自定义的逻辑
+        end
+        return
+        TC -> TC ++-- : 释放 xid 对应的全局锁
+    return
+end
+
+@enduml
