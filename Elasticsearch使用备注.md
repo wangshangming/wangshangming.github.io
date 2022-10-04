@@ -1,16 +1,5 @@
-[toc]
-
-问题
-
-- version字段作用？es乐观锁并发控制
-- Uri search 总结？
-- Profile api 使用
-- 分词器
-- suggester api
-- 跨集群搜索
-
-
-----
+* TOC
+{:toc}
 
 ## 索引
 
